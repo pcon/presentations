@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Release Early and Often</title>
+
+	<meta name="description" content="Continuous Integration and Continuous Delivery in Salesforce">
+	<meta name="author" content="Patrick Connelly">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<link rel="stylesheet" href="../core/deck.core.css">
+	<link rel="stylesheet" href="../extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="../extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="../extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="../extensions/status/deck.status.css">
+	<link rel="stylesheet" href="../extensions/hash/deck.hash.css">
+
+	<link rel="stylesheet" id="style-theme-link" href="../themes/style/swiss.css">
+
+	<link rel="stylesheet" href="this.css">
+	<link rel="stylesheet" href="../css/common.css">
+
+	<script src="../modernizr.custom.js"></script>
+</head>
+<body class="introduction">
+	<header>
+		<nav>
+			<h1><a href="#">CI & CD in SFDC</a></h1>
+		</nav>
+	</header>
+	<article class="deck-container">
+		<section class="slide" id="title-slide">
+			<h1>CI and CD in Salesforce</h1>
+			<h2>Release Early and Often</h2>
+		</section>
+
+		<section class="slide" id="who-we-are">
+			<h2>Who we are.</h2>
+			<h3><a href="http://about.me/patrick.connelly">Patrick Connelly</a></h3>
+			<ul>
+				<li>Salesforce Developer</li>
+			</ul>
+			<h3><a href="http://about.me/amber.neill">Amber Neill</a></h3>
+			<ul>
+				<li>Certified Salesforce Administrator</li>
+			</ul>
+		</section>
+		<section class="slide" id="what-is-ci">
+			<h2>What is CI?</h2>
+			<p>CI stands for Continuous Integration</p>
+			<h3>Principles</h3>
+			<ul>
+				<li>Maintain a code repository</li>
+				<li>Automate the build</li>
+				<li>Make the build self-testing</li>
+				<li>Test in a clone of prod</li>
+			</ul>
+		</section>
+		<section class="slide" id="what-is-cd">
+			<h2>What is CD?</h2>
+			<p>CD stands for Continuous Delivery</p>
+			<h3>Principles</h3>
+			<ul>
+				<li>Low-risk releases are incremental</li>
+				<li>Decouple deployment and release</li>
+				<li>Focus on reducing batch size</li>
+				<li>Optimize for resilience</li>
+			</ul>
+			<p id="cdsource">source: <a href="http://www.informit.com/articles/article.aspx?p=1833567">informIT</a></p>
+		</section>
+		<section class="slide" id="sandbox-structure">
+			<h2>Sandbox Structure</h2>
+			<img class="right" src="diagramOnly_r.png" alt="SFDC deployment diagram" style="margin-right: 40px;"/>
+			<p>Deployments happen from bottom to top</p>
+			<ol>
+				<li>Developer pushes from Git to sandbox</li>
+				<li>Developer pulls from sandbox to Git</li>
+				<li>Features are pushed to Git</li>
+				<li>Git commits are automatically pushed to CI</li>
+				<li>"Manual" push to QA</li>
+				<li>"Manual" push to STAGE</li>
+				<li>"Manual" push to PROD</li>
+			</ol>
+		</section>
+		<section class="slide" id="tools">
+			<h2>Tools</h2>
+			<div class="right" style="margin-right: 40px;">
+				<a href="http://solenopsis.github.com/Solenopsis/"><img src="http://solenopsis.github.com/Solenopsis/logo_sm.png" alt="Solenopsis Logo" /></a>
+			</div>
+			<h3><a href="http://solenopsis.github.com/Solenopsis/">Solenopsis</a></h3>
+			<ul>
+				<li>Command-line tool for deployments</li>
+				<li>Can be used for unattended code pushes</li>
+			</ul>
+			<div class="slide" id="tools-jenkins">
+				<div class="right" style="margin-right: 40px; clear: right; margin-top: 40px;">
+					<a href="http://jenkins-ci.org/"><img src="http://jenkins-ci.org/sites/default/files/images/headshot.png" alt="Jenkins" /></a>
+				</div>
+				<h3><a href="http://jenkins-ci.org/">Jenkins</a></h3>
+				<ul>
+					<li>Used for unattended pushes</li>
+					<li>Can be triggered by events (git update)</li>
+					<li>Can be triggered by time
+						<ul>
+							<li>Useful for test builds</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<section class="slide" id="ideal-release-process">
+			<h2>Ideal Release Cadence</h2>
+			<img src="releaseCadence.png" alt="Release Cadence" />
+			<p>Using SCRUM methodolgy we have a new releasable artifact every two weeks</p>
+			<p>QA test for a week following the spring</p>
+			<p>During the sprint a developer is the <i>release shepard</i> to assist QA with any needs they have</p>
+		</section>
+		<section class="slide" id="limited-audience">
+			<h2>Releasing to prod with limited audience</h2>
+			<h3>What</h3>
+			<ul>
+				<li>Release with no UI front end</li>
+				<li>Release with special flag to show data</li>
+				<li>Release to full userbase</li>
+			</ul>
+			<h3>How</h3>
+			<ul>
+				<li>Add "secret" URL parameter</li>
+				<li>Alter VisualForce to only render when parameter is set</li>
+				<li>Profit!</li>
+			</ul>
+		</section>
+		<section class="slide" id="example">
+			<h2>Ponies - Hidden features in action</h2>
+			<div class="slide" id="no-ponies">
+				<p>Regular action bar</p>
+				<img src="actionBar_noponies.png" alt="action bar sans ponies" />
+			</div>
+			<div class="slide" id="ponies-activated">
+				<p>Action bar after appending "&amp;ponies=true" to url</p>
+				<img src="actionBar_ponies.png" alt="action bar with ponies" />
+			</div>
+		</section>
+		<section class="slide" id="ponies">
+			<h2>Ponies!</h2>
+			<img src="ponies.png" alt="Ponies!" />
+		</section>
+
+		<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+		<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+		<p class="deck-status">
+			<span class="deck-status-current"></span>
+			/
+			<span class="deck-status-total"></span>
+		</p>
+
+		<form action="." method="get" class="goto-form">
+			<label for="goto-slide">Go to slide:</label>
+			<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+			<datalist id="goto-datalist"></datalist>
+			<input type="submit" value="Go">
+		</form>
+	
+		<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+	</article>
+	<footer>
+		<p>Made possible by <a href="http://imakewebthings.com/deck.js/" alt="Deck.js">Deck.js</a></p>
+	</footer>
+
+	<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+	<script>window.jQuery || document.write('<script src="../jquery-1.7.min.js"><\/script>')</script>
+
+	<!-- Deck Core and extensions -->
+	<script src="../core/deck.core.js"></script>
+	<script src="../extensions/hash/deck.hash.js"></script>
+	<script src="../extensions/menu/deck.menu.js"></script>
+	<script src="../extensions/goto/deck.goto.js"></script>
+	<script src="../extensions/status/deck.status.js"></script>
+	<script src="../extensions/navigation/deck.navigation.js"></script>
+
+	<script src="this.js"></script>
+</body>
+</html>
