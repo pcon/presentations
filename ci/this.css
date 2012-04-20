@@ -55,6 +55,13 @@
 	float: right;
 }
 
+#forkme {
+	position: absolute;
+	bottom: 10px;
+	left: -48px;
+	z-index: 3;
+}
+
 @media print {
 	header, footer {
 		display: none !important;
