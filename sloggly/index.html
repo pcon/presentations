@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>SLoggly &amp; You</title>
+
+	<meta name="description" content="Salesforce and Loggly: A match made in the clouds">
+	<meta name="author" content="Patrick Connelly">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<link rel="stylesheet" href="../core/deck.core.css">
+	<link rel="stylesheet" href="../extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="../extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="../extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="../extensions/status/deck.status.css">
+	<link rel="stylesheet" href="../extensions/hash/deck.hash.css">
+
+	<link rel="stylesheet" id="style-theme-link" href="../themes/style/swiss.css">
+
+	<link rel="stylesheet" href="this.css">
+	<link rel="stylesheet" href="../css/common.css">
+
+	<script src="../modernizr.custom.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31062468-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body class="introduction">
+	<header>
+		<nav>
+			<h1><a href="#">Sloggly</a></h1>
+		</nav>
+	</header>
+	<article class="deck-container">
+		<section class="slide" id="title-slide">
+			<h1 style="font-size: 4em;"><p>Salesforce and Loggly:</p><p>A Match Made in the Clouds</p></h1>
+			<h2>SLoggly &amp; You</h2>
+		</section>
+
+		<section class="slide" id="who-i-am">
+			<h2>Who I am.</h2>
+			<h3><a href="http://about.me/patrick.connelly">Patrick Connelly</a></h3>
+			<ul>
+				<li>Salesforce Developer</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="what-is-loggly">
+			<h2>What is <a href="http://loggly.com/">Loggly</a>?</h2>
+			<a href="http://vimeo.com/19813490"><img class="right" src="http://loggly.com/assets/4f234edddabe9d5394006e85/promo_round.png" alt="Hoover" style="margin-right: 40px;" /></a>
+			<ul>
+				<li>Cloud-Based Log Management</li>
+				<li>Searching</li>
+				<li>Supports multiple inputs</li>
+				<li><a href="http://loggly.com/features/systems-monitoring-alerting/">Alerts</a></li>
+				<li><a href="http://loggly.com/features/api-access/">API</a>!</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="what-is-sloggly">
+			<h2>What is <a href="http://solenopsis.org/sloggly/">SLoggly</a>?</h2>
+			<img class="right" src="http://solenopsis.org/sloggly/logo_sm.png" alt="SLoggly Logo" style="margin-right: 40px;" />
+			<ul>
+				<li>Custom settings for setting Loggly URL</li>
+				<li>Support for on the fly batch logging</li>
+				<li>JSON logs in Loggly [<a href="http://loggly.com/blog/2011/06/on-the-way-to-impressive/">1</a>]</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="what-sloggly-is-not">
+			<h2>What SLoggly isn't</h2>
+			<ul>
+				<li>A way to get <b>ALL</b> debug logs out of Salesforce</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="how-to-install">
+			<h2>How to install SLoggly</h2>
+			<ul>
+				<li>From <a href="http://github.com/solenopsis/sloggly/">source</a></li>
+				<li>From <a href="https://sites.secure.force.com/appexchange/listingDetail?listingId=a0N30000009x9XjEAI">AppExchange</a></li>
+			</ul>
+		</section>
+
+		<section class="slide" id="how-to-use-it">
+			<h2>How to use it</h2>
+			<b>Single Log</b>
+			<pre class="code">Loggly.singleLog('Error Message', DateTime.now(), 'LEVEL');</pre>
+			<b>Batching Logs</b>
+			<pre class="code">//Enable batching
+Loggly.BATCH_LOGS=True;
+
+//Create new instance of the Loggly class
+Loggly l = new Loggly();
+
+//Batch a message
+l.add('Error Message', DateTime.now(), 'LEVEL');
+
+//Any calls to Loggly.singleLog after setting BATCH_LOGS will automatically
+// be batched and sent with the .flush
+
+//Flush the message queue
+l.flush();</pre>
+		</section>
+
+		<section class="slide" id="why-use-it">
+			<h2>Why use it?</h2>
+			<ul>
+				<li>Logging in real time is hard in Salesforce</li>
+				<li>Monitoring of known trouble spots</li>
+				<li>Monitoring webservices</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="questions">
+			<h1>Questions?</h1>
+			<div id="forkme">
+				<a href="https://github.com/pcon/presentations"><img src="../forkme.png" /></a>
+			</div>
+		</section>
+
+		<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+		<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+		<p class="deck-status">
+			<span class="deck-status-current"></span>
+			/
+			<span class="deck-status-total"></span>
+		</p>
+
+		<form action="." method="get" class="goto-form">
+			<label for="goto-slide">Go to slide:</label>
+			<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+			<datalist id="goto-datalist"></datalist>
+			<input type="submit" value="Go">
+		</form>
+	
+		<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+	</article>
+	<footer>
+		<p>Made possible by <a href="http://imakewebthings.com/deck.js/" alt="Deck.js">Deck.js</a></p>
+	</footer>
+
+	<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+	<script>window.jQuery || document.write('<script src="../jquery-1.7.min.js"><\/script>')</script>
+
+	<!-- Deck Core and extensions -->
+	<script src="../core/deck.core.js"></script>
+	<script src="../extensions/hash/deck.hash.js"></script>
+	<script src="../extensions/menu/deck.menu.js"></script>
+	<script src="../extensions/goto/deck.goto.js"></script>
+	<script src="../extensions/status/deck.status.js"></script>
+	<script src="../extensions/navigation/deck.navigation.js"></script>
+
+	<script src="this.js"></script>
+</body>
+</html>
