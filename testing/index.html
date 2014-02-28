@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Apex Testing for Humans</title>
+
+	<meta name="description" content="A presentation about testing Apex code">
+	<meta name="author" content="Patrick Connelly">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<link rel="stylesheet" href="../core/deck.core.css">
+	<link rel="stylesheet" href="../extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="../extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="../extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="../extensions/status/deck.status.css">
+	<link rel="stylesheet" href="../extensions/hash/deck.hash.css">
+
+	<link rel="stylesheet" id="style-theme-link" href="../themes/style/swiss.css">
+
+	<link rel="stylesheet" href="this.css">
+	<link rel="stylesheet" href="../css/common.css">
+
+	<link rel="stylesheet" href="../plugins/rainbow/themes/github.css">
+
+	<script src="../modernizr.custom.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31062468-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body class="introduction">
+	<header>
+		<nav>
+			<h1><a href="#">Apex Testing for Humans</a></h1>
+		</nav>
+	</header>
+	<article class="deck-container">
+		<section class="slide" id="title-slide">
+			<h1>
+				<p>Apex Testing for Humans</p>
+				<p style="font-size: 0.5em;">and dumb robots</p>
+			</h1>
+		</section>
+
+		<section class="slide" id="who-i-am">
+			<h2>Who I am</h2>
+			<h3><a href="http://about.me/patrick.connelly">Patrick Connelly</a></h3>
+			<h4 style="margin-left: 40px;"><span class="social"><a href="https://twitter.com/aelst">&#xf309;</a></span> @aelst</h4>
+			<ul>
+				<li>Salesforce Developer</li>
+				<li>Force.com MVP</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="why-testing">
+			<h2>Why testing?</h2>
+			<p>Because you have too, and you should anyway!</p>
+			<ul>
+				<li class="slide" id="why-testing-list1">75% code coverage</li>
+				<li class="slide" id="why-testing-list2">Better user experience</li>
+				<li class="slide" id="why-testing-list3">Catch problems early</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="testing-rules">
+			<h2>3 Testing Rules</h2>
+			<p>Three main rules for testing</p>
+			<div class="slide" id="testing-rules1">
+				<h3>Rule 1</h3>
+				<code>Test.startTest()</code> &mdash; <code>Test.stopTest()</code>
+				<p style="margin-left: 35px;">Code run between these two causes all limits to be reset. Should be used to make sure your code doesn't hit limits. Test setup can interfere with those limits.</p>
+			</div>
+			<div class="slide" id="testing-rules2">
+				<h3>Rule 2</h3>
+				<p>Generate testing data in the test</p>
+			</div>
+			<div class="slide" id="testing-rules3">
+				<h3>Rule 3</h3>
+				<p>Tests only evaluate a single part of functionality</p>
+			</div>
+		</section>
+
+		<section class="slide" id="testing-nonos">
+			<h2>Testing No-Nos</h2>
+			<p>Things you should never do:</p>
+			<ul>
+				<li class="slide" id="testing-nonos1">no-op loops to increase code coverage</li>
+				<li class="slide" id="testing-nonos2">Tests with no asserts</li>
+				<li class="slide" id="testing-nonos3">Require real-world data<sup>*</sup></li>
+			</ul>
+			<small class="slide footnote" id="testing-nonos4"><sup>*</sup> Unless it is absolutely, positively 100% required</small>
+		</section>
+
+		<section class="slide" id="testing-nonos-noop-1">
+			<h2>No-Op AKA Null Operations</h2>
+			<p>We get it.  Testing somethings can be hard.  The test code below would only return a code coverage of 66%</p>
+
+			<pre><code data-language="java">public static myMethod() {
+	if (reallyDifficultToReproduceBoolean) {
+		doSomething();
+	}
+
+	doSomethingElse();
+}
+
+static testMethod void myMethod_test() {
+	myMethod();
+}</code></pre>
+		</section>
+
+		<section class="slide" id="testing-nonos-noop-2">
+			<h2>No-Op AKA Null Operations</h2>
+			<p>The code below will increase your coverage to 83% but it will also kill at least 9 kittens.</p>
+			<p><b style="font-weight: bold">DON'T EVER DO THIS! THINK OF THE KITTENS!!</b></p>
+
+			<pre><code data-language="java">public static myMethod() {
+	Integer i = 0;
+
+	if (i = 0) {
+		i = i;
+	}
+
+	if (reallyDifficultToReproduceBoolean) {
+		doSomething();
+	}
+
+	doSomethingElse();
+}
+
+static testMethod void myMethod_test() {
+	myMethod();
+}</code></pre>
+		</section>
+
+
+		<section class="slide" id="testutils-intro">
+			<h2>TestUtils</h2>
+			<p>What do you mean TestUtils? Why?</p>
+			<ul>
+				<li class="slide" id="testutils-list1">Reusability</li>
+				<li class="slide" id="testutils-list2">Change management</li>
+				<li class="slide" id="testutils-list3">You wouldn't rely on real data would you? Of course not</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="testutils-get-set">
+			<h2>TestUtils &mdash; getters & setters</h2>
+			<p>Let TestUtils generate your objects for you</p>
+			<pre><code data-language="java">//Keeps us from having duplicate names
+static private NAME_COUNT = 10000;
+static private NAME_INC = 1;
+
+//Lets us set the name manually if we want
+public static MyObject__c getMyObject(Account a, String name) {
+	return new MyObject__c(
+		Account__c = a.Id,
+		Name = name,
+		...
+	);
+}
+
+//Gives us an easy way to get a unique object.
+//   This will make bulk operations easier
+public static MyObject__c getMyObject(Account a) {
+	MyObject__c result = getMyObject(a, '_unittest_name_: ' + NAME_COUNT);
+	NAME_COUNT += NAME_INC;
+	return result;
+}</code></pre>
+		</section>
+
+		<section class="slide" id="testutils-fetch">
+			<h2>TestUtils &mdash; fetch</h2>
+			<p>Let TestUtils fetch the stored object for you</p>
+			<pre><code data-language="java">public static MyObject__c fetchMyObject(MyObject__c obj) {
+	return [
+		select Account__c,
+			Name,
+			...
+		from MyObject__c
+		where Id = :obj.Id
+	];
+}
+
+public static List&lt;MyObject__c&gt; fetchMyObjects(Account a) {
+	return [
+		select Account__c,
+			Name,
+			...
+		from MyObject__c
+		where Account__c = :a.Id
+	];
+}</code></pre>
+		</section>
+
+		<section class="slide" id="exceptional-intro">
+			<h2>Exceptions</h2>
+			<p>When doing samurai programming,<sup>*</sup> you rely heavily on exceptions</p>
+			<p>Exceptions in SalesForce can kinda be a pain to test:</p>
+			<ul>
+				<li class="slide" id="exceptional-intro-list1">Ensuring that an exception occurred</li>
+				<li class="slide" id="exceptional-intro-list2">Ensuring the <b style="font-weight: bold;">right</b> exception occurred</li>
+				<li class="slide" id="exceptional-intro-list3">Testing un-handled/unknown exceptions</li>
+			</ul>
+			<small class="footnote"><sup>*</sup>Return successful or don't return at all</small>
+		</section>
+
+		<section class="slide" id="exceptional-known-class">
+			<h2>Exceptions &mdash; The known exception</h2>
+			<p>When you have a known path to generate an exception</p>
+			<pre><code data-language="java">public class MyClass {
+	public static String RESULT_STRING = 'Result data: ';
+	public static String NONZERO_MSG = 'Parameter must be non-zero';
+	public class BadParameterException extends Exception {}
+				
+	public static String myMethod(Integer i) {
+		if (i == 0) {
+			throw new BadParameterException(NONZERO_MSG);
+		}
+
+		return RESULT_STRING + i;
+	}
+}</code></pre>
+		</section>
+
+		<section class="slide" id="exceptional-known-test">
+			<h2>Exceptions &mdash; Known exception testing</h2>
+			<pre><code data-language="java">static testMethod void positiveTest() {
+	Integer i = 10;
+	String result = MyClass.myMethod(i);
+	String expectedResult = MyClass.RESULT_STRING + i;
+
+	System.assertEquals(expectedResult, result, 'Wrong result');
+}
+
+static testMethod void negativeTest() {
+	Integer i = 0;
+
+	try {
+		String result = MyClass.myMethod(i);
+		System.assert(false, 'We should have thrown an exception');
+	} catch (MyClass.BadParameterException e) {
+		System.assertEquals(
+			MyClass.NONZERO_MSG, e.getMessage(),
+			'Right exception type, wrong message'
+		);
+	}
+}</code></pre>
+		</section>
+
+		<section class="slide" id="exceptional-unknown-class-pre">
+			<h2>Exceptions &mdash; Unknown exceptions</h2>
+			<p>When you could have an exception but can't reproduce it</p>
+			<pre><code data-language="java">global with sharing class MyAPI {
+	public static String ERR_MSG = 'OH NOES!';
+
+	WebService static String myWebservice(Integer i) {
+		String result = i;
+
+		try {
+			MyOtherClass.somePotentiallyDangerousMethod(i);
+		} catch (Exception e) {
+			result = ERR_MSG;
+		}
+
+		return result;
+	}
+}</code></pre>
+		</section>
+
+		<section class="slide" id="exceptional-unknown-class-post">
+			<br>
+			<pre><code data-language="java">global with sharing class MyAPI {
+	public static Boolean THROW_EXCEPTION = false;
+	public class UnhandledException extends Exception {}
+
+	public static void generateExceptionForTesting() {
+		if (Test.isRunningTest() &amp;&amp; THROW_EXCEPTION) { 
+			throw new UnhandledException('Exception for testing');
+		}
+	}
+
+	public static String ERR_MSG = 'OH NOES!';
+
+	WebService static String myWebservice(Integer i) {
+		String result = i;
+
+		try {
+			generateExceptionForTesting();
+			MyOtherClass.somePotentiallyDangerousMethod(i);
+		} catch (Exception e) {
+			result = ERR_MSG;
+		}
+
+		return result;
+	}
+}</code></pre>
+		</section>
+
+		<section class="slide" id="exceptional-unknown-test">
+			<h2>Exceptions &mdash; Unknown exceptions testing</h2>
+			<pre><code data-language="java">static testMethod void negativeTest() {
+	Integer i = 0;
+
+	Test.startTest();
+
+	MyAPI.THROW_EXCEPTION = true;
+	String result = MyAPI.myWebservice(i);
+
+	Test.stopTest();
+
+	System.assertEquals(MyAPI.ERR_MSG, result, 'Wrong result');
+}</code></pre>
+		</section>
+
+		<section class="slide" id="bulk-intro">
+			<h2>Bulk data operations</h2>
+			<p>When writing tests, don't forget to test in bulk</p>
+			<p>You may think that you will never do anyting in bulk with your data, but you might, and you'll spend lots of time debugging and cursing.</p>
+			<p class="slide" id="bulk-intro1">Things to consider when making your triggers to make them bulk ready:</p>
+			<ul>
+				<li class="slide" id="bulk-intro-list1">Don't assume only one record: <code>trigger.new().get(0)</code> is bad</li>
+				<li class="slide" id="bulk-intro-list2">No DML in loops
+					<ul style="margin-bottom: 0px;">
+						<li class="slide" id="bulk-intro-list2a">Insert / update lists</li>
+						<li class="slide" id="bulk-intro-list2b">Build up ids/where items for SOQL</li>
+					</ul>
+				</li>
+			</ul>
+		</section>
+
+		<section class="slide" id="bulk-testutils">
+			<h2>TestUtils &amp; bulk data</h2>
+			<p>Adding bulk data operations to your TestUtils class will allow you to easily create large sets of data</p>
+			<pre><code data-language="java">public static Integer DEFAULT_BULK_COUNT = 200;
+
+List&lt;MyObject__c&gt; getMyObjects(Integer count) {
+	List&lt;MyObject__c&gt; result = new List&lt;MyObject__c&gt;();
+
+	for (Integer i = 0; i &lt; count; i++) {
+		result.add(getMyObject());
+	}
+
+	return result;
+}
+
+List&lt;MyObject__c&gt; getMyObjects() {
+	return getMyObjects(DEFAULT_BULK_COUNT);
+}</code></pre>
+		</section>
+
+		<section class="slide" id="bulk-expected">
+			<h2>Bulk data testing</h2>
+			<p>By defining our expected results we can ensure we get back all the ones we expect and no results we don't</p>
+			<pre><code data-language="java">Set&lt;Id&gt; expectedResults = new Set&lt;Id&gt; {
+	testObj1.Id, testObj2.Id, testObj3.Id
+};
+
+Test.startTest();
+List&lt;MyObject__c&gt; results = MyClass.someMethod();
+Test.stopTest();
+
+for (MyObject__c obj: results) {
+	if (!expectedResults.contains(obj.Id)) {
+		System.assertEquals(false, 'Got an object we did not expect');
+	}
+
+	expectedResults.remove(obj.Id);
+}
+
+System.assertEquals(expectedResults.isEmpty(),
+	'Did not get back all results [' + expectedResults + ']');</code></pre>
+		</section>
+
+		<section class="slide" id="test-visible">
+			<h2>Test Visible</h2>
+			<p>Introduced Winter '14 &mdash; Allows tests to directly access <code>private</code> variables and methods in your test</p>
+			<pre><code data-language="java">public class MyClass {
+	@testVisible private String data;
+
+	public MyClass() {}
+
+	public setString(String s) {
+		this.data = s;
+	}
+}
+
+static testMethod void myTest() {
+	String testData = '_unittest_string_: 001';
+	MyClass mc = new MyClass();
+
+	mc.setString(testData);
+
+	System.assertEquals(testData, mc.data, 'Wrong data');
+}</code></pre>
+		</section>
+
+		<section class="slide" id="questions">
+			<h1>Questions?</h1>
+			<div id="forkme">
+				<a href="https://github.com/pcon/presentations"><img src="../forkme.png" /></a>
+			</div>
+		</section>
+
+		<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+		<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+		<p class="deck-status">
+			<span class="deck-status-current"></span>
+			/
+			<span class="deck-status-total"></span>
+		</p>
+
+		<form action="." method="get" class="goto-form">
+			<label for="goto-slide">Go to slide:</label>
+			<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+			<datalist id="goto-datalist"></datalist>
+			<input type="submit" value="Go">
+		</form>
+	
+		<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+	</article>
+	<footer>
+		<p>Made possible by <a href="http://imakewebthings.com/deck.js/" alt="Deck.js">Deck.js</a></p>
+	</footer>
+
+	<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+	<script>window.jQuery || document.write('<script src="../jquery-1.7.min.js"><\/script>')</script>
+
+	<!-- Deck Core and extensions -->
+	<script src="../core/deck.core.js"></script>
+	<script src="../extensions/hash/deck.hash.js"></script>
+	<script src="../extensions/menu/deck.menu.js"></script>
+	<script src="../extensions/goto/deck.goto.js"></script>
+	<script src="../extensions/status/deck.status.js"></script>
+	<script src="../extensions/navigation/deck.navigation.js"></script>
+
+	<script src="../plugins/rainbow/rainbow.js"></script>
+	<script src="../plugins/rainbow/language/java.js"></script>
+	<script src="this.js"></script>
+</body>
+</html>
