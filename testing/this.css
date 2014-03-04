@@ -50,25 +50,6 @@
 	z-index: 4;
 }
 
-.social a {
-	color: inherit;
-	border: none !important;
-	-moz-box-sizing: content-box;
-	-webkit-box-sizing: content-box;
-	box-sizing: content-box;
-	display: inline-block;
-	font-family: 'fontello';
-	font-style: normal !important;
-	font-variant: normal !important;
-	font-weight: normal !important;
-	line-height: 1em;
-	speak: none;
-	text-align: center;
-	text-decoration: none !important;
-	text-transform: none !important;
-	width: 1em;
-}
-
 @media print {
 	header, footer {
 		display: none !important;
