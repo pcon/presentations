@@ -1,0 +1,8 @@
+def average: length as $arry_len | add / $arry_len;
+def toseconds: . / 1000 | tostring + "s";
+
+[[reduce .[] as $i ({}; .[$i.DASHBOARD_ID] += ($i|[.RUN_TIME|tonumber])) |
+	to_entries[] | { key: .key, value: .value | average | round }] |
+	sort_by(.value) | reverse |
+	.[0:5][] | {key: .key, value: .value | toseconds}] |
+	from_entries
